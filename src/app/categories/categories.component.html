@@ -45,7 +45,8 @@
                 <td class="align-items-center">{{ i + 1 }}</td>
                 <td class="align-items-center">{{category.data.category}}</td>
                 <td>
-                  <button class="btn btn-sm btn-warning text-" (click)="onEdit(category.id, category.data.category)">Edit</button>
+                  <button class="btn btn-sm btn-warning" (click)="onEdit(category.id, category.data.category)">Edit</button>
+                  <button class="btn btn-sm btn-danger ml-2" (click)="onDelete(category.id)">Delete</button>
                 </td>
               </tr>
             </tbody>
