@@ -3,6 +3,7 @@ import { CategoriesService } from './../../services/categories.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Post } from 'src/app/models/post';
 import { PostsService } from 'src/app/services/posts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-post',
@@ -19,7 +20,8 @@ export class NewPostComponent {
   constructor(
     private categoryService: CategoriesService,
     private fb: FormBuilder,
-    private postService: PostsService
+    private postService: PostsService,
+    private router: Router
   ){
     this.postForm = this.fb.group({
       title: ['',[Validators.required, Validators.minLength(5)]],
@@ -76,5 +78,7 @@ export class NewPostComponent {
 
     this.postForm.reset()
     this.imgSrc = './assets/image-placeholder.png'
+
+    this.router.navigate(['/posts'])
   }
 }
