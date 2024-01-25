@@ -3,7 +3,7 @@ import { CategoriesService } from './../../services/categories.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Post } from 'src/app/models/post';
 import { PostsService } from 'src/app/services/posts.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-new-post',
@@ -11,25 +11,46 @@ import { Router } from '@angular/router';
   styleUrls: ['./new-post.component.css']
 })
 export class NewPostComponent {
-  permalink: string = '';
   imgSrc: any = './assets/image-placeholder.png';
   selectedImg: any;
   categories: Array<any> = []
-  postForm: FormGroup;
+  postForm!: FormGroup;
+  post: any
+  postStatus: string = 'Add new'
+  id: string = ''
 
   constructor(
     private categoryService: CategoriesService,
     private fb: FormBuilder,
     private postService: PostsService,
-    private router: Router
+    private route: ActivatedRoute
   ){
-    this.postForm = this.fb.group({
-      title: ['',[Validators.required, Validators.minLength(5)]],
-      permalink: [{disabled: true}, Validators.required],
-      excerpt: ['',[Validators.required, Validators.minLength(10)]],
-      category: ['',Validators.required],
-      postImg: ['',Validators.required],
-      content: ['',Validators.required],
+    this.route.queryParams.subscribe(val => {
+      this.id = val['id'];
+      this.postService.loadDataById(this.id).subscribe(post => {
+        this.post = post
+
+        if (this.post) {
+          this.postForm = this.fb.group({
+            title: [this.post.title,[Validators.required, Validators.minLength(5)]],
+            excerpt: [this.post.excerpt,[Validators.required, Validators.minLength(10)]],
+            category: [`${this.post.category.categoryId}-${this.post.category.category}`,Validators.required],
+            postImg: ['',Validators.required],
+            content: [this.post.content,Validators.required],
+          })
+          this.imgSrc = this.post.postImgPath
+          this.postStatus = 'Edit'
+        } else {
+          this.postForm = this.fb.group({
+            // { value: '', disabled: true }
+            title: ['',[Validators.required, Validators.minLength(5)]],
+            excerpt: ['',[Validators.required, Validators.minLength(10)]],
+            category: ['',Validators.required],
+            postImg: ['',Validators.required],
+            content: ['',Validators.required],
+          })
+        }
+      })
     })
   }
 
@@ -39,14 +60,9 @@ export class NewPostComponent {
     })
   }
 
-  get fc() {
-    return this.postForm.controls
-  }
-
-  onTitleChanged($event: any) {
-    const title = $event.target.value
-    this.permalink = title.replace(/\s/g, '-')
-  }
+  // get fc() {
+  //   return this.postForm.controls
+  // }
 
   showPreview($event: any) {
     const reader = new FileReader()
@@ -60,7 +76,6 @@ export class NewPostComponent {
 
     const postData: Post = {
       title: this.postForm.value.title,
-      permalink: this.postForm.value.permalink,
       category: {
         categoryId: splitted[0],
         category: splitted[1]
@@ -74,11 +89,9 @@ export class NewPostComponent {
       createdAt: new Date()
     }
 
-    this.postService.uploadImage(this.selectedImg, postData)
+    this.postService.uploadImage(this.selectedImg, postData, this.id)
 
     this.postForm.reset()
     this.imgSrc = './assets/image-placeholder.png'
-
-    this.router.navigate(['/posts'])
   }
 }

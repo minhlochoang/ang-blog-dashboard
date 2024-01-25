@@ -19,4 +19,8 @@ export class AllPostComponent {
       this.postArray = val
     })
   }
+
+  onDelete(postImgPath: string, id: string) {
+    this.postService.deleteData(postImgPath,id)
+  }
 }
