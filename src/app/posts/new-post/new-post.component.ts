@@ -72,6 +72,9 @@ export class NewPostComponent {
       createdAt: new Date()
     }
 
-    this.postService.uploadImage(this.selectedImg)
+    this.postService.uploadImage(this.selectedImg, postData)
+
+    this.postForm.reset()
+    this.imgSrc = './assets/image-placeholder.png'
   }
 }
