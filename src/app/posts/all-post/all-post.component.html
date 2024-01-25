@@ -22,11 +22,11 @@
               <tr>
                 <th [width]="10">No</th>
                 <th [width]="100">Post Image</th>
-                <th [width]="200">Title</th>
-                <th [width]="300">Excerpt</th>
+                <th [width]="180">Title</th>
+                <th [width]="260">Excerpt</th>
                 <th [width]="100">Category</th>
                 <th>Date</th>
-                <th>Actions</th>
+                <th [width]="280">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -38,8 +38,10 @@
                 <td>{{ post.data.category.category }}</td>
                 <td>{{ post.data.createdAt.toMillis() | date }}</td>
                 <td>
-                  <button class="btn btn-sm btn-warning" routerLink="/posts/new" [queryParams]="{id: post.id}">Edit</button>
+                  <button class="btn btn-sm btn-info" routerLink="/posts/new" [queryParams]="{id: post.id}">Edit</button>
                   <button class="btn btn-sm btn-danger ml-2" (click)="onDelete(post.data.postImgPath, post.id)">Delete</button>
+                  <button *ngIf="!post.data.isFeatured" class="btn btn-sm btn-success ml-2" (click)="onFeatured(post.id, true)">Mark Featured</button>
+                  <button *ngIf="post.data.isFeatured" class="btn btn-sm btn-warning ml-2" (click)="onFeatured(post.id, false)">Remove Featured</button>
                 </td>
               </tr>
             </tbody>

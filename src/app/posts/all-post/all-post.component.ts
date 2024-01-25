@@ -23,4 +23,11 @@ export class AllPostComponent {
   onDelete(postImgPath: string, id: string) {
     this.postService.deleteData(postImgPath,id)
   }
+
+  onFeatured(id: string, isFeatured: boolean) {
+    const feature = {
+      isFeatured: isFeatured
+    }
+    this.postService.putFeatured(id, feature)
+  }
 }

@@ -69,4 +69,10 @@ export class PostsService {
       })
     })
   }
+
+  putFeatured(id: string, featured: any) {
+    this.afs.doc(`posts/${id}`).update(featured).then(() => {
+      this.toastr.info('Featured updated successfully')
+    })
+  }
 }
