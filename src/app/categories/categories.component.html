@@ -1,8 +1,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 bg-secondary-theme p-5 shadow-effect">
-      <h3 class="text-center text-theme-primary">{{formStatus}} Categories</h3>
-      <p class="text-center mb-5">You can {{formStatus}} new categories from here...</p>
+      <div class="text-center">
+        <h3 class="text-center text-theme-primary">{{formStatus}} Categories</h3>
+        <p class="text-center">You can {{formStatus}} new categories from here...</p>
+        <button class="btn btn-warning ml-2 text-center mb-5" routerLink="/">Back to Dashboard</button>
+      </div>
+
 
       <form action="" class="form-inline text-center align-items-start" #categoryForm = 'ngForm' (ngSubmit)="onSubmit(categoryForm)">
         <div class="form-group col-md-10">
